@@ -23,9 +23,9 @@ public:
   Civilization(const Civilization & source);
   void read(); //fill in fields for the civilization
   void display(); //display details of the civilization
-  virtual void buy(std::string to_buy, int amount); //buy goods from market
-  virtual void sell(std::string to_sell, int amount); //sell goods to market in exchange for money
-  virtual void trade(std::string civilization, std::string item); //civilization is the other civilization you wish to trade with, item is what to trade
+  virtual void buy(std::string to_buy, int amount) = 0; //buy goods from market
+  virtual void sell(std::string to_sell, int amount) = 0; //sell goods to market in exchange for money
+  virtual void trade(std::string civilization, std::string item) = 0; //civilization is the other civilization you wish to trade with, item is what to trade
   void display_market();
 protected:
   char* name;
@@ -98,7 +98,7 @@ private:
 
 
 // ************** DATA STRUCTURE: DLL ******************
-class Node : public Civilization {
+class Node {
   Node();
   Node(const Civilization & source);
   Node *& go_next(); //go to the next node
@@ -106,20 +106,23 @@ class Node : public Civilization {
   void set_prev(Node *& prev);
 private:
   Node * next;
+  Node * prev;
+  Civilization * civ;
 };
-
 
 class DLL {
 public:
   DLL();
   ~DLL();
   DLL(const DLL & source); // copy constructor
-  void insert(Civilization & civ); //insert to DLL
-  void remove(Civilization & civ); //remove from DLL
+  void insert(const Civilization *& civ); //insert to DLL
+  void remove(const Civilization *& civ); //remove from DLL
+  void display();
   void remove_all(); //clear from DLL
 private:
   void insert(Node * current, Node *& to_add); //recursive insert
   void remove(Node * current, Node *& to_remove); //recursive remove
+  void display(Node * current); //recursive display
   void remove_all(Node *& current); //recursive remove all
   Node ** head;
 };
