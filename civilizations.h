@@ -35,7 +35,7 @@ public:
   bool compare_food(int i); //compares food passed in to civ's food 
   bool compare_military(int i); //compares military passed in to civ's military
   bool compare_action();
-  void required_action();
+  void required_action(int type);
   void failed_to_do_action(int civ);
   void rename(char* n);
 protected:
@@ -78,8 +78,9 @@ public:
   void train_troops(); //gain more soldiers
   void feed_troops(); //you must feed troops every round or you lose soldiers
   void wage_war(); //potentially gain resources but RNG how many soldiers you lose
+  void display();
 private:
-  int troops; //amount of soldiers
+  int successful_wars;
 };
 
 // ************** CIVILIZATION: INDUSTRY  ******************
@@ -93,10 +94,9 @@ public:
  
   //specifically industry functions
   void produce_new_product(); //create a new product you can produce
-  void check_status(); //check on production of products
   void work(); //required every turn. Produces exisitng products
 private:
-  std::vector<std::string> products; //you can sell or trade these
+  std::vector<std::string> products; //you can sell these
 };
 
 
@@ -104,7 +104,9 @@ private:
 class Node {
   Node();
   Node(const Civilization & source);
-  Node *& go_next(); //go to the next node
+
+  //commented out so that this can compile
+  //  Node *& go_next(); //go to the next node
   void set_next(Node *& next);
   void set_prev(Node *& prev);
 private:

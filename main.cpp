@@ -131,51 +131,46 @@ void gameplay(int civ, int round, char* name, Agriculture & a, Military & m, Ind
   if(civ == AGR) a.display();
   if(civ == MIL) m.display();
   if(civ == IND) i.display();
-  
-  cout << "Pick three actions to do (don't forget about your required one!" << endl;
-  cout << "1 - buy goods from the market" << endl;
-  cout << "2 - sell items" << endl;
-  cout << "3 - trade" << endl;
 
-  //civilization specific:
-  if(civ == AGR){
-    a.required_action();
-    cout << "4 - harvest crops" << endl;
-    cout << "5 - plant more plots" << endl;
-    cout << "6 - REQUIRED: water crops" << endl;
-    cin >> choice;
-    cin.get();
-    for (int i = 0; i < 3; i++){
+  for(int turn = 0; turn < 3; turn++){
+    cout << "Pick three actions to do (don't forget about your required one!" << endl;
+    cout << "1 - buy goods from the market" << endl;
+    cout << "2 - sell items" << endl;
+    cout << "3 - trade" << endl;
+
+    //civilization specific:
+    if(civ == AGR){
+      a.required_action(1);
+      cout << "4 - harvest crops" << endl;
+      cout << "5 - plant more plots" << endl;
+      cout << "6 - REQUIRED: water crops" << endl;
+      cin >> choice;
+      cin.get();
       agriculture(choice, a);
-      if(a.compare_action() == false){
+      if(turn == 3 && (a.compare_action() == false)){
 	a.failed_to_do_action(1);
-      }	
+      }
     }
-  }
-  else if(civ == MIL){
-    m.required_action();
-    cout << "4 - train more troops" << endl;
-    cout << "5 - wage war" << endl;
-    cout << "6 - REQUIRED: feed troops" << endl;
-    cin >> choice;
-    cin.get();
-    for (int i = 0; i < 3; i++){
+    else if(civ == MIL){
+      m.required_action(1);
+      cout << "4 - train more troops" << endl;
+      cout << "5 - wage war" << endl;
+      cout << "6 - REQUIRED: feed troops" << endl;
+      cin >> choice;
+      cin.get();
       military(choice, m);
-      if(m.compare_action() == false){
+      if(turn == 3 && (m.compare_action() == false)){
 	m.failed_to_do_action(2);
       }
     }
-  }
-  else {
-    i.required_action();
-    cout << "4 - produce a new product" << endl;
-    cout << "5 - check status of products" << endl;
-    cout << "6 - REQUIRED: go to work" << endl;
-    cin >> choice;
-    cin.get();
-    for(int j = 0; j < 3; j++){
+    else {
+      i.required_action(1);
+      cout << "4 - produce a new product" << endl;
+      cout << "5 - REQUIRED: go to work" << endl;
+      cin >> choice;
+      cin.get();
       industry(choice, i);
-      if(i.compare_action() == false){
+      if(turn == 3 && (i.compare_action() == false)){
 	i.failed_to_do_action(3);
       }
     }
@@ -238,6 +233,7 @@ void agriculture(int c, Agriculture & a){
   }
   else if(c == 6){
     a.water_crops();
+    a.required_action(2);
   }
   else {
     cout << "That was not one of the choices. Quitting program." << endl;
@@ -299,12 +295,12 @@ void military(int c, Military & m){
   }
   else if(c == 6){
     m.feed_troops();
+    m.required_action(2);
   }
   else {
     cout << "That was not one of the choices. Quitting program." << endl;
     exit(1);
   }
-
 }
 
 //industry functions
@@ -358,10 +354,8 @@ void industry(int c, Industry & i){
     i.produce_new_product();
   }
   else if(c == 5){
-    i.check_status();
-  }
-  else if(c == 6){
     i.work();
+    i.required_action(2);
   }
   else {
     cout << "That was not one of the choices. Quitting program." << endl;

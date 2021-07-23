@@ -127,23 +127,39 @@ bool Civilization::check_money(int item, int amount){
 }
 
 //set up required action for each turn
-void Civilization::required_action(){
-  required_action_done = false;
+void Civilization::required_action(int type){
+  if(type == 1){
+    required_action_done = false;
+  } else {
+    required_action_done = true;
+  }
 }
 
 //compare if required action done or not
 bool Civilization::compare_action(){
-  return required_action_done;
+  if(required_action_done == true){
+    std::cout << " " << std::endl;
+    std::cout << "Required action done for this turn!" << std::endl;
+    return true;
+  }
+  return false;
 }
 
 //if they failed to do the required action, penalize
 void Civilization::failed_to_do_action(int civ){ //civ: 1 = agr, 2 = mil, 3 = ind
   if(civ == 1){ //agriculture
+    std::cout << "You failed to do your required action!" << std::endl;
+    std::cout << "10 of your plants died. -10 food. " << std::endl;
     food -= 10;
   } else if(civ == 2){ //military
     military -= 10;
+    std::cout << "You failed to do your required action! 10 of your soldiers" << std::endl;
+    std::cout << "went hungry and left the military" << std::endl;
   } else { //industry
     money -= 10;
+    std::cout << "You failed to do your required action!" << std::endl;
+    std::cout << "Your buyers weren't pleased, and one of them stopped" << std::endl;
+    std::cout << "doing business with you. -10 dollars." << std::endl;
   }
 }
 
@@ -193,6 +209,7 @@ void Agriculture::sell(const std::string & to_sell, int amount){
       food -= amount;
       money += (4 * amount);
       m_food += amount;
+      std::cout << "You gained  " << (4 * amount) << " dollars!" << std::endl;
     }
   } else if (to_sell == "soldiers"){
     bool valid = compare_military(amount);
@@ -202,6 +219,7 @@ void Agriculture::sell(const std::string & to_sell, int amount){
       military -= amount;
       money += (10 * amount);
       m_military += amount;
+      std::cout << "You gained  " << (4 * amount) << " dollars!" << std::endl;
     }
   } else {
     std::cout << "That was not a valid item to sell" << std::endl;
@@ -256,7 +274,6 @@ void Agriculture::harvest(){
 void Agriculture::water_crops(){
   std::cout << " " << std::endl;
   std::cout << "Yay! The plants are looking very happy now." << std::endl;
-  required_action_done = true;
 }
 
 //plant another plot of crops
@@ -317,6 +334,7 @@ void Military::sell(const std::string & to_sell, int amount){
       food -= amount;
       money += (4 * amount);
       m_food += amount;
+      std::cout << "You gained  " << (4 * amount) << " dollars!" << std::endl;
     }
   } else if (to_sell == "soldiers"){
     bool valid = compare_military(amount);
@@ -326,6 +344,7 @@ void Military::sell(const std::string & to_sell, int amount){
       military -= amount;
       money += (10 * amount);
       m_military += amount;
+      std::cout << "You gained  " << (4 * amount) << " dollars!" << std::endl;
     }
   } else {
     std::cout << "That was not a valid item to sell" << std::endl;
@@ -355,17 +374,35 @@ void Military::trade(int lost, int al, int gained, int ag){
 
 //gain more soldiers
 void Military::train_troops(){
-
+  std::cout << "Training was successful. You gained 15 soldiers." << std::endl;
+  military += 15;
 }
 
 //required every turn
 void Military::feed_troops(){
-
+  std::cout << " " << std::endl;
+  std::cout << "Required action done! "<< std::endl;
 }
 
 //potentially gain more resources but you can lose soldiers
 void Military::wage_war(){
+  int success = rand() % 10;
+  if(success > 5){
+    std::cout << "You won the war!!! + 20 meat and + 40 dollars." << std::endl;
+    food += 20;
+    money += 40;
+    successful_wars++;
+  } else {
+    std::cout << "Their army was too powerful. You lost 25 soldiers. "<< std::endl;
+    military -= 25;
+  }
+}
 
+//display
+void Military::display(){
+  std::cout << "wars won: " << successful_wars << std::endl;
+  std::cout << " " << std::endl;
+  Civilization::display();
 }
 
 // ***************** INDUSTRY CLASS *********************
@@ -410,6 +447,7 @@ void Industry::sell(const std::string & to_sell, int amount){
       food -= amount;
       money += (4 * amount);
       m_food += amount;
+      std::cout << "You gained  " << (4 * amount) << " dollars!" << std::endl;
     }
   } else if (to_sell == "soldiers"){
     bool valid = compare_military(amount);
@@ -419,6 +457,7 @@ void Industry::sell(const std::string & to_sell, int amount){
       military -= amount;
       money += (10 * amount);
       m_military += amount;
+      std::cout << "You gained  " << (4 * amount) << " dollars!" << std::endl;
     }
   } else {
     std::cout << "That was not a valid item to sell" << std::endl;
@@ -448,17 +487,17 @@ void Industry::trade(int lost, int al, int gained, int ag){
 
 //create a new product that you can produce
 void Industry::produce_new_product(){
-
-}
-
-//check on current products
-void Industry::check_status(){
-
+  std::string item;
+  std::cout << "What product would you like to produce?" << std::endl;
+  std::getline(std::cin, item);
+  std::cout << "Sounds good. Your production line now produces " << item << std::endl;
+  std::cout << "You can sell your new item for money." << std::endl;
 }
 
 //required every turn
 void Industry::work(){
-
+  std::cout << "You went to work today. Good job! You completed your required action." << std::endl;
+  
 }
 
 // ***************** NODE CLASS *********************
@@ -474,9 +513,9 @@ Node::Node(const Civilization & source){
 }
 
 //go to the next node
-Node *& Node::go_next(){
-
-}
+//Node *& Node::go_next(){
+  
+//}
 
 //set next
 void Node::set_next(Node*& next){
