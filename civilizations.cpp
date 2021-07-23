@@ -135,6 +135,7 @@ void Agriculture::buy(const std::string & to_buy, int amount){
       std::cout << "You do not have enough money :(" << std::endl;
     } else {
       m_food -= amount;
+      food += amount;
     }
   }
   else if(to_buy == "soldiers"){
@@ -143,6 +144,7 @@ void Agriculture::buy(const std::string & to_buy, int amount){
       std::cout << "You do not have enough money :(" << std::endl;
     } else {
       m_military -= amount;
+      military += amount;
     }
   }
   else {
@@ -152,7 +154,27 @@ void Agriculture::buy(const std::string & to_buy, int amount){
 
 //sell to market
 void Agriculture::sell(const std::string & to_sell, int amount){
-
+  if(to_sell == "meat"){
+    bool valid = compare_food(amount);
+    if(valid == false){
+      std::cout << "That is more meat than you have. "<< std::endl;
+    } else {
+      food -= amount;
+      money += (4 * amount);
+      m_food += amount;
+    }
+  } else if (to_sell == "soldiers"){
+    bool valid = compare_military(amount);
+    if(valid == false){
+      std::cout << "That is more soldiers than you have." << std::endl;
+    } else {
+      military -= amount;
+      money += (10 * amount);
+      m_military += amount;
+    }
+  } else {
+    std::cout << "That was not a valid item to sell" << std::endl;
+  }
 }
 
 //trade with another civ
@@ -183,12 +205,52 @@ Military::Military() : Civilization(){
 
 //buy from market
 void Military::buy(const std::string & to_buy, int amount){
-
+  if(to_buy == "meat"){
+    bool valid = check_money(1, amount);
+    if(valid == false){
+      std::cout << "You do not have enough money :(" << std::endl;
+    } else {
+      m_food -= amount;
+      food += amount;
+    }
+  }
+  else if(to_buy == "soldiers"){
+    bool valid = check_money(2, amount);
+    if(valid == false){
+      std::cout << "You do not have enough money :(" << std::endl;
+    } else {
+      m_military -= amount;
+      military += amount;
+    }
+  }
+  else {
+    std::cout << "That was not a valid option to purchase" << std::endl;
+  }
 }
 
 //sell to market
 void Military::sell(const std::string & to_sell, int amount){
-
+  if(to_sell == "meat"){
+    bool valid = compare_food(amount);
+    if(valid == false){
+      std::cout << "That is more meat than you have. "<< std::endl;
+    } else {
+      food -= amount;
+      money += (4 * amount);
+      m_food += amount;
+    }
+  } else if (to_sell == "soldiers"){
+    bool valid = compare_military(amount);
+    if(valid == false){
+      std::cout << "That is more soldiers than you have." << std::endl;
+    } else {
+      military -= amount;
+      money += (10 * amount);
+      m_military += amount;
+    }
+  } else {
+    std::cout << "That was not a valid item to sell" << std::endl;
+  }
 }
 
 //trade with another civ
@@ -219,12 +281,52 @@ Industry::Industry() : Civilization(){
 
 //buy from market
 void Industry::buy(const std::string & to_buy, int amount){
-
+  if(to_buy == "meat"){
+    bool valid = check_money(1, amount);
+    if(valid == false){
+      std::cout << "You do not have enough money :(" << std::endl;
+    } else {
+      m_food -= amount;
+      food += amount;
+    }
+  }
+  else if(to_buy == "soldiers"){
+    bool valid = check_money(2, amount);
+    if(valid == false){
+      std::cout << "You do not have enough money :(" << std::endl;
+    } else {
+      m_military -= amount;
+      military += amount;
+    }
+  }
+  else {
+    std::cout << "That was not a valid option to purchase" << std::endl;
+  }
 }
 
 //sell to market
 void Industry::sell(const std::string & to_sell, int amount){
-
+  if(to_sell == "meat"){
+    bool valid = compare_food(amount);
+    if(valid == false){
+      std::cout << "That is more meat than you have. "<< std::endl;
+    } else {
+      food -= amount;
+      money += (4 * amount);
+      m_food += amount;
+    }
+  } else if (to_sell == "soldiers"){
+    bool valid = compare_military(amount);
+    if(valid == false){
+      std::cout << "That is more soldiers than you have." << std::endl;
+    } else {
+      military -= amount;
+      money += (10 * amount);
+      m_military += amount;
+    }
+  } else {
+    std::cout << "That was not a valid item to sell" << std::endl;
+  }
 }
 
 //trade with another civ
