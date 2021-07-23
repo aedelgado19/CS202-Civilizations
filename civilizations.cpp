@@ -14,38 +14,42 @@
 // ***************** CIVILIZATION CLASS *********************
 
 //constructor
-Civilization::Civilization(){
+Civilization::Civilization() : name(nullptr), food(0), money(0), military(0), m_food(500), m_military(100){
   
 }
 
 //destructor
 Civilization::~Civilization(){
-  
+  delete [] name;
 }
 
 //copy constructor
 Civilization::Civilization(const Civilization & source){
-
-}
-
-//fill in civilization details
-void Civilization::read(){
-
+  name = new char[strlen(source.name) + 1];
+  strcpy(name, source.name);
 }
 
 //show all civ details
 void Civilization::display(){
-
+  std::cout << "Civilization name: " << name << std::endl;
+  std::cout << "Food: " << food << " meat" << std::endl;
+  std::cout << "Money: " << money << " dollars" << std::endl;
+  std::cout << "Military: " << military << " soldiers" << std::endl;
+  std::cout << " " << std::endl;
 }
 
 //display items on market
 void Civilization::display_market(){
-
+  std::cout << m_food << " meat" << std::endl;
+  std::cout << m_military << " soldiers" << std::endl;
 }
 
 //displays inventory (true if there is stuff, false if empty inventory)
 bool Civilization::display_inventory(){
-  
+  std::cout << "You have: " << std::endl;
+  std::cout << food << " meat" << std::endl;
+  std::cout << military << " soldiers" << std::endl;
+  std::cout << money << " dollars" << std::endl;
 }
 
 //displays random civilization names

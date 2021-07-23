@@ -6,7 +6,7 @@
    which the three civilizations inherit, and the DLL class that the
    three civilizations are stored in.
 
-   Last updated: July 20, 2021
+   Last updated: July 22, 2021
 */
 #include <iostream>
 #include <stdlib.h>
@@ -38,6 +38,8 @@ protected:
   int food;
   int money; //how much money you have
   int military; // how much protection your civilization has
+  int m_food; //market food
+  int m_military; //market soldiers
 };
 
 // ************** CIVILIZATION: AGRICULTURE  ******************

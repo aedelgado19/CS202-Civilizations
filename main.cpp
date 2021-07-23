@@ -8,7 +8,7 @@
    the game play are displayed when the client runs the game
    and selects "rules".
    
-   last updated: July 20, 2021
+   last updated: July 22, 2021
  */
 
 #include <iostream>
