@@ -189,13 +189,13 @@ void agriculture(int c, Agriculture & a){
     trading(a);
   }
   else if(c == 4){
-
+    a.harvest();
   }
   else if(c == 5){
-
+    a.water_crops();
   }
   else if(c == 6){
-
+    a.plant_plots();
   }
   else {
     cout << "That was not one of the choices. Quitting program." << endl;
@@ -238,13 +238,13 @@ void military(int c, Military & m){
     trading(m);
   }
   else if(c == 4){
-
+    m.train_troops();
   }
   else if(c == 5){
-
+    m.wage_war();
   }
   else if(c == 6){
-
+    m.feed_troops();
   }
   else {
     cout << "That was not one of the choices. Quitting program." << endl;
@@ -289,13 +289,13 @@ void industry(int c, Industry & i){
     trading(i);
   }
   else if(c == 4){
-
+    i.produce_new_product();
   }
   else if(c == 5){
-
+    i.check_status();
   }
   else if(c == 6){
-
+    i.work();
   }
   else {
     cout << "That was not one of the choices. Quitting program." << endl;
