@@ -27,6 +27,7 @@ public:
   virtual void buy(const std::string & to_buy, int amount) = 0; //buy goods from market
   virtual void sell(const std::string & to_sell, int amount) = 0; //sell goods to market in exchange for money
   virtual void trade(int lost, int al, int gained, int ag) = 0; //lost is what you gave, al is how much you lost, gained is what you gained and ag is how much of that item you gained
+  bool check_money(int item, int amount);
   void display_market(); //displays items you can buy
   bool display_inventory();
   void random_civs(); //prints out random civilization names

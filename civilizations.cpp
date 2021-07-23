@@ -102,21 +102,57 @@ bool Civilization::compare_military(int i){
   return true;
 }
 
+//checks if the civ has enough money to buy something
+//for item, 1 = food, 2 = soldier
+//a soldier is $10 and food is $4
+//return false for do not have enough money, true for can afford
+bool Civilization::check_money(int item, int amount){
+  if(item == 1){ //food
+    int i = amount * 4;
+    if(money < i){
+      return false;
+    }
+  } else { // soldier
+    int j = amount * 10;
+    if(money < j){
+      return false;
+    }
+  }
+  return true;
+}
 // ***************** AGRICULTURE CLASS *********************
 
 //constructor
-Agriculture::Agriculture() : Civilization(){
+Agriculture::Agriculture() : Civilization(), amount_of_plots(0){
 
 }
 
 //buy from market
 void Agriculture::buy(const std::string & to_buy, int amount){
-  //call function to check that they have enough money. if not enough print
+  if(to_buy == "meat"){
+    bool valid = check_money(1, amount);
+    if(valid == false){
+      std::cout << "You do not have enough money :(" << std::endl;
+    } else {
+      m_food -= amount;
+    }
+  }
+  else if(to_buy == "soldiers"){
+    bool valid = check_money(2, amount);
+    if(valid == false){
+      std::cout << "You do not have enough money :(" << std::endl;
+    } else {
+      m_military -= amount;
+    }
+  }
+  else {
+    std::cout << "That was not a valid option to purchase" << std::endl;
+  }
 }
 
 //sell to market
 void Agriculture::sell(const std::string & to_sell, int amount){
-  //check if valid
+
 }
 
 //trade with another civ
