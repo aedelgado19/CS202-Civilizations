@@ -39,8 +39,59 @@ void Civilization::display(){
 }
 
 //display items on market
-void display_market(){
+void Civilization::display_market(){
 
+}
+
+//displays inventory (true if there is stuff, false if empty inventory)
+bool Civilization::display_inventory(){
+  
+}
+
+//displays random civilization names
+void Civilization::random_civs(){
+  std::vector<std::string> v;
+  srand(time(NULL));
+  
+  v.push_back("The Mayans");
+  v.push_back("The Huns");
+  v.push_back("The Aztecs");
+  v.push_back("The Goths");
+  v.push_back("The Franks");
+  v.push_back("The Japanese");
+  v.push_back("The Norsemen");
+  v.push_back("The Romans");
+  v.push_back("The Byzantines");
+  v.push_back("The French");
+  for(int i = 0; i < 3; i++){
+    int n = rand() % 9;
+    std::cout << (i + 1) << ") " << v.at(n) << std::endl;
+  }
+}
+
+//print out a random inventory amounts (used in trading)
+void Civilization::random_inventory(int & food, int & soldiers){
+  srand(time(NULL));
+  int f = rand() % 20;
+  int s = rand() % 10;
+  food = f;
+  soldiers = s;
+}
+
+//compares food passed in to civ's food
+bool Civilization::compare_food(int i){
+  if(i > food){
+    return false;
+  }
+  return true;
+}
+
+//compares military passed in to civ's military
+bool Civilization::compare_military(int i){
+  if(i > military){
+    return false;
+  }
+  return true;
 }
 
 // ***************** AGRICULTURE CLASS *********************
@@ -51,17 +102,17 @@ Agriculture::Agriculture() : Civilization(){
 }
 
 //buy from market
-void Agriculture::buy(std::string to_buy, int amount){
-
+void Agriculture::buy(const std::string & to_buy, int amount){
+  //call function to check that they have enough money. if not enough print
 }
 
 //sell to market
-void Agriculture::sell(std::string to_sell, int amount){
-
+void Agriculture::sell(const std::string & to_sell, int amount){
+  //check if valid
 }
 
 //trade with another civ
-void Agriculture::trade(std::string civilization, std::string item){
+void Agriculture::trade(int lost, int al, int gained, int ag){
 
 }
 
@@ -87,17 +138,17 @@ Military::Military() : Civilization(){
 }
 
 //buy from market
-void Military::buy(std::string to_buy, int amount){
+void Military::buy(const std::string & to_buy, int amount){
 
 }
 
 //sell to market
-void Military::sell(std::string to_sell, int amount){
+void Military::sell(const std::string & to_sell, int amount){
 
 }
 
 //trade with another civ
-void Military::trade(std::string civilization, std::string item){
+void Military::trade(int lost, int al, int gained, int ag){
 
 }
 
@@ -111,8 +162,8 @@ void Military::feed_troops(){
 
 }
 
-//potentially gain more soldiers
-void Military::boost_morale(){
+//potentially gain more resources but you can lose soldiers
+void Military::wage_war(){
 
 }
 
@@ -123,17 +174,17 @@ Industry::Industry() : Civilization(){
 }
 
 //buy from market
-void Industry::buy(std::string to_buy, int amount){
+void Industry::buy(const std::string & to_buy, int amount){
 
 }
 
 //sell to market
-void Industry::sell(std::string to_sell, int amount){
+void Industry::sell(const std::string & to_sell, int amount){
 
 }
 
 //trade with another civ
-void Industry::trade(std::string civilization, std::string item){
+void Industry::trade(int lost, int al, int gained, int ag){
 
 }
 

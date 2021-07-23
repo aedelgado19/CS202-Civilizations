@@ -13,18 +13,19 @@
 
 #include <iostream>
 #include "civilizations.h"
+#include <math.h>
 using namespace std;
 
 #define AGR 1 //agriculture
 #define MIL 2 //military
 #define IND 3 //industry
 
-void AI(int civ);
 void gameplay(int civ, int round, char* name, Agriculture & a, Military & m, Industry & i);
 void agriculture(int c, Agriculture & a);
 void military(int c, Military & m);
 void industry(int c, Industry & i);
 void rules();
+void trading(Civilization & civ);
 
 int main(){
   char yn;
@@ -107,8 +108,8 @@ void rules(){
     cout << "   REQUIRED ACTION FOR EACH TURN: feed troops - or else you lose soldiers" << endl;
     cout << "   STRENGTHS: starts with a very high military" << endl;
     cout << "   WEAKNESSES: has low money and low food" << endl;
-    cout << "   tip: choose the 'boost morale' option to increase " << endl;
-    cout << "   military points" << endl;  
+    cout << "   tip: choose the 'wage war' option to potentially " << endl;
+    cout << "   gain more resources but at the cost of soldiers" << endl;
     cout << " " << endl;
     cout << "--------------------------------------------------------" << endl;
   } 
@@ -137,7 +138,7 @@ void gameplay(int civ, int round, char* name, Agriculture & a, Military & m, Ind
   }
   else if(civ == MIL){
     cout << "4 - train more troops" << endl;
-    cout << "5 - boost morale" << endl;
+    cout << "5 - wage war" << endl;
     cout << "6 - REQUIRED: feed troops" << endl;
     cin >> choice;
     cin.get();
@@ -156,13 +157,36 @@ void gameplay(int civ, int round, char* name, Agriculture & a, Military & m, Ind
 //Agriculture functions
 void agriculture(int c, Agriculture & a){
   if(c == 1){
-    
+    string purchase;
+    int amount;
+    a.display_market();
+    cout << "What would you like to buy? " << endl;
+    cout << "> ";
+    getline(cin, purchase);
+    cout << "How much of " << purchase << " would you like to buy?" << endl;
+    cout << "> ";
+    cin >> amount;
+    cin.get();
+    a.buy(purchase, amount);
   }
   else if(c == 2){
-
+    string sell;
+    int amount;
+    bool valid = a.display_inventory();
+    if(valid == false){
+      cout << "You don't have anything to sell!" << endl;
+    } else {
+      cout << "What would you like to sell?" << endl;
+      cout << "> ";
+      getline(cin, sell);
+      cout << "How much would of " << sell << " would you like to sell?" << endl;
+      cin >> amount;
+      cin.get();
+      a.sell(sell, amount);
+    }
   }
   else if(c == 3){
-
+    trading(a);
   }
   else if(c == 4){
 
@@ -182,13 +206,36 @@ void agriculture(int c, Agriculture & a){
 //military functions
 void military(int c, Military & m){
   if(c == 1){
-
+    string purchase;
+    int amount;
+    m.display_market();
+    cout << "What would you like to buy? " << endl;
+    cout << "> ";
+    getline(cin, purchase);
+    cout << "How much of " << purchase << " would you like to buy?" << endl;
+    cout << "> ";
+    cin >> amount;
+    cin.get();
+    m.buy(purchase, amount);
   }
   else if(c == 2){
-
+    string sell;
+    int amount;
+    bool valid = m.display_inventory();
+    if(valid == false){
+      cout << "You don't have anything to sell!" << endl;
+    } else {
+      cout << "What would you like to sell?" << endl;
+      cout << "> ";
+      getline(cin, sell);
+      cout << "How much would of " << sell << " would you like to sell?" << endl;
+      cin >> amount;
+      cin.get();
+      m.sell(sell, amount);
+    }
   }
   else if(c == 3){
-
+    trading(m);
   }
   else if(c == 4){
 
@@ -209,13 +256,37 @@ void military(int c, Military & m){
 //industry functions
 void industry(int c, Industry & i){
   if(c == 1){
-
+    string purchase;
+    int amount;
+    i.display_market();
+    cout << "What would you like to buy? " << endl;
+    cout << "> ";
+    getline(cin, purchase);
+    cout << "How much of " << purchase << " would you like to buy?" << endl;
+    cout << "> ";
+    cin >> amount;
+    cin.get();
+    i.buy(purchase, amount);
   }
   else if(c == 2){
+    string sell;
+    int amount;
+    bool valid = i.display_inventory();
+    if(valid == false){
+      cout << "You don't have anything to sell!" << endl;
+    } else {
+      cout << "What would you like to sell?" << endl;
+      cout << "> ";
+      getline(cin, sell);
+      cout << "How much would of " << sell << " would you like to sell?" << endl;
+      cin >> amount;
+      cin.get();
+      i.sell(sell, amount);
+    }
 
   }
   else if(c == 3){
-
+    trading(i);
   }
   else if(c == 4){
 
@@ -229,5 +300,66 @@ void industry(int c, Industry & i){
   else {
     cout << "That was not one of the choices. Quitting program." << endl;
     exit(1);
+  }
+}
+
+
+void trading(Civilization & civ){
+  srand(time(NULL));
+  int c;
+  int food;
+  int soldiers;
+  int gained;
+  int lost;
+  int ag; // amount gained
+  int al; // amount lost
+    
+  cout << "Possible civilizations to trade with: "<< endl;
+  civ.random_civs();
+  cout << "Who would you like to trade with? (1 - 3)" << endl;
+  cout << "> ";
+  cin >> c;
+  cin.get();
+  cout << "Items you own: " << endl;
+  civ.display_inventory();
+  cout << "Items you could trade for: "<< endl;
+  civ.random_inventory(food, soldiers);
+  cout << food << " food" << endl;
+  cout << soldiers << " soldiers" << endl;
+  cout << "Which item would you like? (1 - food, 2 - soldiers)" << endl;
+  cout << "> ";
+  cin >> gained;
+  cin.get();
+  cout << "How much?" << endl;
+  cin >> ag;
+  cin.get();
+  if(gained == 1 && ag > food){
+    cout << "Invalid trade. You selected more items than they own." << endl;
+  }
+  else if(gained == 2 && ag > soldiers){
+    cout << "Invalid trade. You selected more items than you have." << endl;
+  }
+  else {
+    cout << "What would you like to trade (of your own inventory)?" << endl;
+    cout << "(1 - food, 2 - soldiers)" << endl;
+    cout << "> ";
+    cin >> lost;
+    cin.get();
+    cout << "How many? " << endl;
+    cin >> al;
+    cin.get();
+    if(lost == 1 && (civ.compare_food(al) == false)){
+      cout << "Invalid trade. You selected more items than you have." << endl;
+    }
+    else if(lost == 2 && (civ.compare_military(al) == false)){
+      cout << "Invalid trade. You selected more items than you have." << endl;
+    }
+    else {
+      //rng if successful or not
+      int success = rand() % 10;
+      if(success % 2 == 0){
+	civ.trade(lost, al, gained, ag);
+      }
+    }
   }
 }

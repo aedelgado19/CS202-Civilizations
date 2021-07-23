@@ -13,6 +13,7 @@
 #include <cstring>
 #include <stdlib.h>
 #include <vector>
+#include <math.h>
 
 // ************** BASE CLASS: CIVILIZATION *******************
 
@@ -23,16 +24,20 @@ public:
   Civilization(const Civilization & source);
   void read(); //fill in fields for the civilization
   void display(); //display details of the civilization
-  virtual void buy(std::string to_buy, int amount) = 0; //buy goods from market
-  virtual void sell(std::string to_sell, int amount) = 0; //sell goods to market in exchange for money
-  virtual void trade(std::string civilization, std::string item) = 0; //civilization is the other civilization you wish to trade with, item is what to trade
+  virtual void buy(const std::string & to_buy, int amount) = 0; //buy goods from market
+  virtual void sell(const std::string & to_sell, int amount) = 0; //sell goods to market in exchange for money
+  virtual void trade(int lost, int al, int gained, int ag) = 0; //lost is what you gave, al is how much you lost, gained is what you gained and ag is how much of that item you gained
   void display_market(); //displays items you can buy
+  bool display_inventory();
+  void random_civs(); //prints out random civilization names
+  void random_inventory(int & food, int & soldiers); //print out a random inventory amounts (used in trading)
+  bool compare_food(int i); //compares food passed in to civ's food 
+  bool compare_military(int i); //compares military passed in to civ's military 
 protected:
   char* name;
   int food;
   int money; //how much money you have
   int military; // how much protection your civilization has
-  std::vector<std::string> inventory; //holds any items you bought or traded for
 };
 
 // ************** CIVILIZATION: AGRICULTURE  ******************
@@ -40,9 +45,9 @@ protected:
 class Agriculture : public Civilization {
 public:
   Agriculture();
-  void buy(std::string to_buy, int amount);
-  void sell(std::string to_sell, int amount);
-  void trade(std::string civilization, std::string item);
+  void buy(const std::string & to_buy, int amount);
+  void sell(const std::string & to_sell, int amount);
+  void trade(int lost, int al, int gained, int ag);
   //specifically agriculture functions:
   bool harvest(); //harvest crops. The bool determines success based on crop status
   void water_crops(); //required every turn
@@ -58,14 +63,14 @@ public:
 class Military : public Civilization {
 public:
   Military();
-  void buy(std::string to_buy, int amount);
-  void sell(std::string to_sell, int amount);
-  void trade(std::string civilization, std::string item);
-
+  void buy(const std::string & to_buy, int amount);
+  void sell(const std::string & to_sell, int amount);
+  void trade(int lost, int al, int gained, int ag);
+ 
   //specifically military functions:
   void train_troops(); //gain more soldiers
   void feed_troops(); //you must feed troops every round or you lose soldiers
-  void boost_morale(); //potentially gain more soldiers
+  void wage_war(); //potentially gain resources but RNG how many soldiers you lose
 private:
   int troops; //amount of soldiers
 };
@@ -75,10 +80,10 @@ private:
 class Industry : public Civilization {
 public:
   Industry();
-  void buy(std::string to_buy, int amount);
-  void sell(std::string to_sell, int amount);
-  void trade(std::string civilization, std::string item);
-
+  void buy(const std::string & to_buy, int amount);
+  void sell(const std::string & to_sell, int amount);
+  void trade(int lost, int al, int gained, int ag);
+ 
   //specifically industry functions
   void produce_new_product(); //create a new product you can produce
   void check_status(); //check on production of products
