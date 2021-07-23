@@ -61,6 +61,13 @@ int main(){
   cout << "> ";
   cin.get(name, 50);
   cin.get();
+  if(choice == 1){
+    a.rename(name);
+  } else if(choice == 2){
+    m.rename(name);
+  } else {
+    i.rename(name);
+  }
   gameplay(choice, 0, name, a, m, i);
   return 0;
 }
@@ -72,9 +79,7 @@ void rules(){
   cout << "In this game, you can choose one of three" << endl;
   cout << "civilizations to play as: agricultural, " << endl;
   cout << "military, or industrial. Each has their own " << endl;
-  cout << "strengths and weaknesses. The computer will " << endl;
-  cout << "play as the other two civilizations you did " << endl;
-  cout << "not select. The game has 5 rounds. In each round, " << endl;
+  cout << "strengths and weaknesses. The game has 5 rounds. In each round, " << endl;
   cout << "you will have 2 actions to play, and one required " << endl;
   cout << "action that depends on your specific civilization. " << endl;
   cout << "If you do not do the required action, you may lose points." << endl;
@@ -122,10 +127,11 @@ void rules(){
 //basic gameplay
 void gameplay(int civ, int round, char* name, Agriculture & a, Military & m, Industry & i){
   int choice;
+
+  if(civ == AGR) a.display();
+  if(civ == MIL) m.display();
+  if(civ == IND) i.display();
   
-  if(round != 0){
-    //TODO: display status (inside civilization) ***************************
-  }
   cout << "Pick three actions to do (don't forget about your required one!" << endl;
   cout << "1 - buy goods from the market" << endl;
   cout << "2 - sell items" << endl;
@@ -139,10 +145,12 @@ void gameplay(int civ, int round, char* name, Agriculture & a, Military & m, Ind
     cout << "6 - REQUIRED: water crops" << endl;
     cin >> choice;
     cin.get();
-    agriculture(choice, a);
-    if(a.compare_action() == false){
-      a.failed_to_do_action(1);
-    }	
+    for (int i = 0; i < 3; i++){
+      agriculture(choice, a);
+      if(a.compare_action() == false){
+	a.failed_to_do_action(1);
+      }	
+    }
   }
   else if(civ == MIL){
     m.required_action();
@@ -151,9 +159,11 @@ void gameplay(int civ, int round, char* name, Agriculture & a, Military & m, Ind
     cout << "6 - REQUIRED: feed troops" << endl;
     cin >> choice;
     cin.get();
-    military(choice, m);
-    if(m.compare_action() == false){
-      m.failed_to_do_action(2);
+    for (int i = 0; i < 3; i++){
+      military(choice, m);
+      if(m.compare_action() == false){
+	m.failed_to_do_action(2);
+      }
     }
   }
   else {
@@ -163,10 +173,15 @@ void gameplay(int civ, int round, char* name, Agriculture & a, Military & m, Ind
     cout << "6 - REQUIRED: go to work" << endl;
     cin >> choice;
     cin.get();
-    industry(choice, i);
-    if(i.compare_action() == false){
-      i.failed_to_do_action(3);
+    for(int j = 0; j < 3; j++){
+      industry(choice, i);
+      if(i.compare_action() == false){
+	i.failed_to_do_action(3);
+      }
     }
+  }
+  if(round < 5){
+    gameplay(civ, round + 1, name, a, m, i);
   }
 }
 
@@ -193,23 +208,23 @@ void agriculture(int c, Agriculture & a){
     cin >> amount;
     cin.get();
     a.buy(purchase, amount);
-    a.display_inventory();
+    a.display_inventory(true);
   }
   else if(c == 2){
     string sell;
     int amount;
-    bool valid = a.display_inventory();
+    bool valid = a.display_inventory(false);
     if(valid == false){
       cout << "You don't have anything to sell!" << endl;
     } else {
       cout << "What would you like to sell?" << endl;
       cout << "> ";
       getline(cin, sell);
-      cout << "How much would of " << sell << " would you like to sell?" << endl;
+      cout << "How much " << sell << " would you like to sell?" << endl;
       cin >> amount;
       cin.get();
       a.sell(sell, amount);
-      a.display_inventory();
+      a.display_inventory(true);
     }
   }
   else if(c == 3){
@@ -219,10 +234,10 @@ void agriculture(int c, Agriculture & a){
     a.harvest();
   }
   else if(c == 5){
-    a.water_crops();
+    a.plant_plots();
   }
   else if(c == 6){
-    a.plant_plots();
+    a.water_crops();
   }
   else {
     cout << "That was not one of the choices. Quitting program." << endl;
@@ -254,23 +269,23 @@ void military(int c, Military & m){
     cin >> amount;
     cin.get();
     m.buy(purchase, amount);
-    m.display_inventory();
+    m.display_inventory(true);
   }
   else if(c == 2){
     string sell;
     int amount;
-    bool valid = m.display_inventory();
+    bool valid = m.display_inventory(false);
     if(valid == false){
       cout << "You don't have anything to sell!" << endl;
     } else {
       cout << "What would you like to sell?" << endl;
       cout << "> ";
       getline(cin, sell);
-      cout << "How much would of " << sell << " would you like to sell?" << endl;
+      cout << "How much " << sell << " would you like to sell?" << endl;
       cin >> amount;
       cin.get();
       m.sell(sell, amount);
-      m.display_inventory();
+      m.display_inventory(true);
     }
   }
   else if(c == 3){
@@ -316,23 +331,23 @@ void industry(int c, Industry & i){
     cin >> amount;
     cin.get();
     i.buy(purchase, amount);
-    i.display_inventory();
+    i.display_inventory(true);
   }
   else if(c == 2){
     string sell;
     int amount;
-    bool valid = i.display_inventory();
+    bool valid = i.display_inventory(false);
     if(valid == false){
       cout << "You don't have anything to sell!" << endl;
     } else {
       cout << "What would you like to sell?" << endl;
       cout << "> ";
       getline(cin, sell);
-      cout << "How much would of " << sell << " would you like to sell?" << endl;
+      cout << "How much " << sell << " would you like to sell?" << endl;
       cin >> amount;
       cin.get();
       i.sell(sell, amount);
-      i.display_inventory();
+      i.display_inventory(true);
     }
 
   }
@@ -371,7 +386,7 @@ void trading(Civilization & civ){
   cout << "> ";
   cin >> c;
   cin.get();
-  civ.display_inventory();
+  civ.display_inventory(false);
   cout << " " << endl;
   cout << "----------------------" << endl;
   cout << "Items you could trade for: "<< endl;

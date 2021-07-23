@@ -29,7 +29,7 @@ public:
   virtual void trade(int lost, int al, int gained, int ag) = 0; //lost is what you gave, al is how much you lost, gained is what you gained and ag is how much of that item you gained
   bool check_money(int item, int amount);
   void display_market(); //displays items you can buy
-  bool display_inventory();
+  bool display_inventory(bool m);
   void random_civs(); //prints out random civilization names
   void random_inventory(int & food, int & soldiers); //print out a random inventory amounts (used in trading)
   bool compare_food(int i); //compares food passed in to civ's food 
@@ -37,6 +37,7 @@ public:
   bool compare_action();
   void required_action();
   void failed_to_do_action(int civ);
+  void rename(char* n);
 protected:
   char* name;
   int food;
@@ -59,10 +60,9 @@ public:
   void harvest(); //harvest crops.
   void water_crops(); //required every turn
   void plant_plots(); //plant more another plot of crops (requires money, but you can have multiple instances of crops growing at the same time).
-  
+  void display();
  private:
   int amount_of_plots;
-  std::vector<std::string> to_sell; //vector of items you can sell (once you harvest a crop, it is added here as a potential item to sell/trade)
 };
 
 // ************** CIVILIZATION: MILITARY  ******************

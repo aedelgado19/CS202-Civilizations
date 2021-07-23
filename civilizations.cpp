@@ -14,7 +14,8 @@
 // ***************** CIVILIZATION CLASS *********************
 
 //constructor
-Civilization::Civilization(int f, int m, int s) : name(nullptr), food(f), money(m), military(s), m_food(500), m_military(100){
+Civilization::Civilization(int f, int m, int s) : food(f), money(m), military(s), m_food(500), m_military(100){
+  name = new char[50];
   srand(time(NULL));
 }
 
@@ -47,13 +48,14 @@ void Civilization::display_market(){
 }
 
 //displays inventory (true if there is stuff, false if empty inventory)
-bool Civilization::display_inventory(){
+//bool is whether or not to display the money
+bool Civilization::display_inventory(bool m){
   std::cout << " " << std::endl;
   std::cout << "----------------------" << std::endl;
   std::cout << "You have: " << std::endl;
   std::cout << "   " << food << " meat" << std::endl;
   std::cout << "   " << military << " soldiers" << std::endl;
-  std::cout << "   " << money << " dollars" << std::endl;
+  if(m == true) std::cout << "   " << money << " dollars" << std::endl;
   if(food == 0 && military == 0){
     return false;
   }
@@ -144,6 +146,11 @@ void Civilization::failed_to_do_action(int civ){ //civ: 1 = agr, 2 = mil, 3 = in
     money -= 10;
   }
 }
+
+//rename the name of the civilization
+void Civilization::rename(char* n){
+  strcpy(name, n);
+}
 // ***************** AGRICULTURE CLASS *********************
 
 //constructor (food, money, soldiers)
@@ -201,6 +208,13 @@ void Agriculture::sell(const std::string & to_sell, int amount){
   }
 }
 
+//display
+void Agriculture::display(){
+  std::cout << " " << std::endl;
+  std::cout << "Amount of plots: " << amount_of_plots << std::endl;
+  Civilization::display();
+}
+
 //trade with another civ. for lost and gained, 1 = food, 2 = soldiers
 void Agriculture::trade(int lost, int al, int gained, int ag){
   if(lost == 1){ //food
@@ -228,7 +242,7 @@ void Agriculture::harvest(){
   
   for(int i = 0; i < amount_of_plots; i++){
     n = rand() % 10;
-    if(n % 2 == 0){ //if even
+    if(n > 5){ //if even
       std::cout << "You successfully harvested plot #" << (i+1) <<"!" << std::endl;
       std::cout << " + 20 food" << std::endl;
       food += 20;
@@ -240,6 +254,8 @@ void Agriculture::harvest(){
 
 //water your crops
 void Agriculture::water_crops(){
+  std::cout << " " << std::endl;
+  std::cout << "Yay! The plants are looking very happy now." << std::endl;
   required_action_done = true;
 }
 
@@ -247,6 +263,8 @@ void Agriculture::water_crops(){
 void Agriculture::plant_plots(){
   char yn;
   std::cout << "Planting a new plot costs $10. Would you like to proceed (y/n)?" << std::endl;
+  std::cin >> yn;
+  std::cin.get();
   if (yn == 'y'){
     if(money >= 10){
       amount_of_plots += 1;
