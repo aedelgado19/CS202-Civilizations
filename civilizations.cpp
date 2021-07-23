@@ -31,25 +31,29 @@ Civilization::Civilization(const Civilization & source){
 
 //show all civ details
 void Civilization::display(){
+  std::cout << " " << std::endl;
+  std::cout << "----------------------" << std::endl;
   std::cout << "Civilization name: " << name << std::endl;
-  std::cout << "Food: " << food << " meat" << std::endl;
-  std::cout << "Money: " << money << " dollars" << std::endl;
-  std::cout << "Military: " << military << " soldiers" << std::endl;
+  std::cout << "   Food: " << food << " meat" << std::endl;
+  std::cout << "   Money: " << money << " dollars" << std::endl;
+  std::cout << "   Military: " << military << " soldiers" << std::endl;
   std::cout << " " << std::endl;
 }
 
 //display items on market
 void Civilization::display_market(){
-  std::cout << m_food << " meat" << std::endl;
-  std::cout << m_military << " soldiers" << std::endl;
+  std::cout << "   " << m_food << " meat" << std::endl;
+  std::cout << "   " << m_military << " soldiers" << std::endl;
 }
 
 //displays inventory (true if there is stuff, false if empty inventory)
 bool Civilization::display_inventory(){
+  std::cout << " " << std::endl;
+  std::cout << "----------------------" << std::endl;
   std::cout << "You have: " << std::endl;
-  std::cout << food << " meat" << std::endl;
-  std::cout << military << " soldiers" << std::endl;
-  std::cout << money << " dollars" << std::endl;
+  std::cout << "   " << food << " meat" << std::endl;
+  std::cout << "   " << military << " soldiers" << std::endl;
+  std::cout << "   " << money << " dollars" << std::endl;
 }
 
 //displays random civilization names

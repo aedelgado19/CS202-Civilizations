@@ -53,7 +53,7 @@ int main(){
   cout << "> ";
   cin >> choice;
   cin.get();
-  if(choice != 1 || choice != 2 || choice != 3){
+  if(choice != 1 && choice != 2 && choice != 3){
     cout << "That was not one of the choices. Quitting program" << endl;
     return 0;
   }
@@ -159,11 +159,14 @@ void agriculture(int c, Agriculture & a){
   if(c == 1){
     string purchase;
     int amount;
+    cout << "-------------------" << endl;
+    cout << "   MARKET ITEMS: " << endl;
+    cout << "-------------------" << endl;
     a.display_market();
     cout << "What would you like to buy? " << endl;
     cout << "> ";
     getline(cin, purchase);
-    cout << "How much of " << purchase << " would you like to buy?" << endl;
+    cout << "How much " << purchase << " would you like to buy?" << endl;
     cout << "> ";
     cin >> amount;
     cin.get();
@@ -208,11 +211,15 @@ void military(int c, Military & m){
   if(c == 1){
     string purchase;
     int amount;
+
+    cout << "-------------------" << endl;
+    cout << "   MARKET ITEMS: " << endl;
+    cout << "-------------------" << endl;
     m.display_market();
     cout << "What would you like to buy? " << endl;
     cout << "> ";
     getline(cin, purchase);
-    cout << "How much of " << purchase << " would you like to buy?" << endl;
+    cout << "How much " << purchase << " would you like to buy?" << endl;
     cout << "> ";
     cin >> amount;
     cin.get();
@@ -258,11 +265,15 @@ void industry(int c, Industry & i){
   if(c == 1){
     string purchase;
     int amount;
+
+    cout << "-------------------" << endl;
+    cout << "   MARKET ITEMS: " << endl;
+    cout << "-------------------" << endl;
     i.display_market();
     cout << "What would you like to buy? " << endl;
     cout << "> ";
     getline(cin, purchase);
-    cout << "How much of " << purchase << " would you like to buy?" << endl;
+    cout << "How much " << purchase << " would you like to buy?" << endl;
     cout << "> ";
     cin >> amount;
     cin.get();
@@ -320,12 +331,15 @@ void trading(Civilization & civ){
   cout << "> ";
   cin >> c;
   cin.get();
-  cout << "Items you own: " << endl;
   civ.display_inventory();
+  cout << " " << endl;
+  cout << "----------------------" << endl;
   cout << "Items you could trade for: "<< endl;
   civ.random_inventory(food, soldiers);
-  cout << food << " food" << endl;
-  cout << soldiers << " soldiers" << endl;
+  cout << "   " << food << " food" << endl;
+  cout << "   " << soldiers << " soldiers" << endl;
+  cout << "----------------------" << endl;
+  cout << " " << endl;
   cout << "Which item would you like? (1 - food, 2 - soldiers)" << endl;
   cout << "> ";
   cin >> gained;
