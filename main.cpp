@@ -133,28 +133,40 @@ void gameplay(int civ, int round, char* name, Agriculture & a, Military & m, Ind
 
   //civilization specific:
   if(civ == AGR){
+    a.required_action();
     cout << "4 - harvest crops" << endl;
     cout << "5 - plant more plots" << endl;
     cout << "6 - REQUIRED: water crops" << endl;
     cin >> choice;
     cin.get();
     agriculture(choice, a);
+    if(a.compare_action() == false){
+      a.failed_to_do_action(1);
+    }	
   }
   else if(civ == MIL){
+    m.required_action();
     cout << "4 - train more troops" << endl;
     cout << "5 - wage war" << endl;
     cout << "6 - REQUIRED: feed troops" << endl;
     cin >> choice;
     cin.get();
     military(choice, m);
+    if(m.compare_action() == false){
+      m.failed_to_do_action(2);
+    }
   }
   else {
+    i.required_action();
     cout << "4 - produce a new product" << endl;
     cout << "5 - check status of products" << endl;
     cout << "6 - REQUIRED: go to work" << endl;
     cin >> choice;
     cin.get();
     industry(choice, i);
+    if(i.compare_action() == false){
+      i.failed_to_do_action(3);
+    }
   }
 }
 
@@ -181,6 +193,7 @@ void agriculture(int c, Agriculture & a){
     cin >> amount;
     cin.get();
     a.buy(purchase, amount);
+    a.display_inventory();
   }
   else if(c == 2){
     string sell;
@@ -196,6 +209,7 @@ void agriculture(int c, Agriculture & a){
       cin >> amount;
       cin.get();
       a.sell(sell, amount);
+      a.display_inventory();
     }
   }
   else if(c == 3){
@@ -240,6 +254,7 @@ void military(int c, Military & m){
     cin >> amount;
     cin.get();
     m.buy(purchase, amount);
+    m.display_inventory();
   }
   else if(c == 2){
     string sell;
@@ -255,6 +270,7 @@ void military(int c, Military & m){
       cin >> amount;
       cin.get();
       m.sell(sell, amount);
+      m.display_inventory();
     }
   }
   else if(c == 3){
@@ -300,6 +316,7 @@ void industry(int c, Industry & i){
     cin >> amount;
     cin.get();
     i.buy(purchase, amount);
+    i.display_inventory();
   }
   else if(c == 2){
     string sell;
@@ -315,6 +332,7 @@ void industry(int c, Industry & i){
       cin >> amount;
       cin.get();
       i.sell(sell, amount);
+      i.display_inventory();
     }
 
   }

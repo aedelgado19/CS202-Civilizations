@@ -14,8 +14,8 @@
 // ***************** CIVILIZATION CLASS *********************
 
 //constructor
-Civilization::Civilization() : name(nullptr), food(0), money(0), military(0), m_food(500), m_military(100){
-  
+Civilization::Civilization(int f, int m, int s) : name(nullptr), food(f), money(m), military(s), m_food(500), m_military(100){
+  srand(time(NULL));
 }
 
 //destructor
@@ -54,6 +54,10 @@ bool Civilization::display_inventory(){
   std::cout << "   " << food << " meat" << std::endl;
   std::cout << "   " << military << " soldiers" << std::endl;
   std::cout << "   " << money << " dollars" << std::endl;
+  if(food == 0 && military == 0){
+    return false;
+  }
+  return true;
 }
 
 //displays random civilization names
@@ -79,7 +83,6 @@ void Civilization::random_civs(){
 
 //print out a random inventory amounts (used in trading)
 void Civilization::random_inventory(int & food, int & soldiers){
-  srand(time(NULL));
   int f = rand() % 20;
   int s = rand() % 10;
   food = f;
@@ -120,11 +123,32 @@ bool Civilization::check_money(int item, int amount){
   }
   return true;
 }
+
+//set up required action for each turn
+void Civilization::required_action(){
+  required_action_done = false;
+}
+
+//compare if required action done or not
+bool Civilization::compare_action(){
+  return required_action_done;
+}
+
+//if they failed to do the required action, penalize
+void Civilization::failed_to_do_action(int civ){ //civ: 1 = agr, 2 = mil, 3 = ind
+  if(civ == 1){ //agriculture
+    food -= 10;
+  } else if(civ == 2){ //military
+    military -= 10;
+  } else { //industry
+    money -= 10;
+  }
+}
 // ***************** AGRICULTURE CLASS *********************
 
-//constructor
-Agriculture::Agriculture() : Civilization(), amount_of_plots(0){
-
+//constructor (food, money, soldiers)
+Agriculture::Agriculture() : Civilization(200, 100, 20), amount_of_plots(2){
+  
 }
 
 //buy from market
@@ -177,29 +201,66 @@ void Agriculture::sell(const std::string & to_sell, int amount){
   }
 }
 
-//trade with another civ
+//trade with another civ. for lost and gained, 1 = food, 2 = soldiers
 void Agriculture::trade(int lost, int al, int gained, int ag){
-
+  if(lost == 1){ //food
+    food -= al;
+    if(gained == 1){ //food
+      food += ag;
+    } else {
+      military += ag;
+    }
+  } else if(lost == 2){ //soldiers
+    military -= al;
+    if(gained == 1){
+      food += ag;
+    } else {
+      military += ag;
+    }
+  } else {
+    std::cout << "That was not a valid option." << std::endl;
+  }
 }
 
-//harvest crops. returns true for success, false for failure
-bool Agriculture::harvest(){
-
+//harvest crops
+void Agriculture::harvest(){
+  int n = 0;
+  
+  for(int i = 0; i < amount_of_plots; i++){
+    n = rand() % 10;
+    if(n % 2 == 0){ //if even
+      std::cout << "You successfully harvested plot #" << (i+1) <<"!" << std::endl;
+      std::cout << " + 20 food" << std::endl;
+      food += 20;
+    } else {
+      std::cout << "Plot #" << (i+1) << " wasn't ready to harvest." << std::endl;
+    }
+  }
 }
 
 //water your crops
 void Agriculture::water_crops(){
-
+  required_action_done = true;
 }
 
 //plant another plot of crops
 void Agriculture::plant_plots(){
-
+  char yn;
+  std::cout << "Planting a new plot costs $10. Would you like to proceed (y/n)?" << std::endl;
+  if (yn == 'y'){
+    if(money >= 10){
+      amount_of_plots += 1;
+      money -= 10;
+    } else {
+      std::cout << "You do not have enough money" << std::endl;
+    }
+  }
 }
 
 // ***************** MILITARY CLASS *********************
 
-Military::Military() : Civilization(){
+//constructor (food, money, soldiers)
+Military::Military() : Civilization(100, 100, 100){
 
 }
 
@@ -255,7 +316,23 @@ void Military::sell(const std::string & to_sell, int amount){
 
 //trade with another civ
 void Military::trade(int lost, int al, int gained, int ag){
-
+  if(lost == 1){ //food
+    food -= al;
+    if(gained == 1){ //food
+      food += ag;
+    } else {
+      military += ag;
+    }
+  } else if(lost == 2){ //soldiers
+    military -= al;
+    if(gained == 1){
+      food += ag;
+    } else {
+      military += ag;
+    }
+  } else {
+    std::cout << "That was not a valid option." << std::endl;
+  }
 }
 
 //gain more soldiers
@@ -275,7 +352,8 @@ void Military::wage_war(){
 
 // ***************** INDUSTRY CLASS *********************
 
-Industry::Industry() : Civilization(){
+//constructor (food, money, soldiers)
+Industry::Industry() : Civilization(50, 200, 50){
 
 }
 
@@ -331,7 +409,23 @@ void Industry::sell(const std::string & to_sell, int amount){
 
 //trade with another civ
 void Industry::trade(int lost, int al, int gained, int ag){
-
+  if(lost == 1){ //food
+    food -= al;
+    if(gained == 1){ //food
+      food += ag;
+    } else {
+      military += ag;
+    }
+  } else if(lost == 2){ //soldiers
+    military -= al;
+    if(gained == 1){
+      food += ag;
+    } else {
+      military += ag;
+    }
+  } else {
+    std::cout << "That was not a valid option." << std::endl;
+  }
 }
 
 //create a new product that you can produce

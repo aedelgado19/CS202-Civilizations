@@ -19,7 +19,7 @@
 
 class Civilization {
 public:
-  Civilization(); //constructor
+  Civilization(int f, int m, int s); //constructor (food, money, soldiers)
   virtual ~Civilization();
   Civilization(const Civilization & source);
   void read(); //fill in fields for the civilization
@@ -33,7 +33,10 @@ public:
   void random_civs(); //prints out random civilization names
   void random_inventory(int & food, int & soldiers); //print out a random inventory amounts (used in trading)
   bool compare_food(int i); //compares food passed in to civ's food 
-  bool compare_military(int i); //compares military passed in to civ's military 
+  bool compare_military(int i); //compares military passed in to civ's military
+  bool compare_action();
+  void required_action();
+  void failed_to_do_action(int civ);
 protected:
   char* name;
   int food;
@@ -41,6 +44,7 @@ protected:
   int military; // how much protection your civilization has
   int m_food; //market food
   int m_military; //market soldiers
+  bool required_action_done;
 };
 
 // ************** CIVILIZATION: AGRICULTURE  ******************
@@ -52,7 +56,7 @@ public:
   void sell(const std::string & to_sell, int amount);
   void trade(int lost, int al, int gained, int ag);
   //specifically agriculture functions:
-  bool harvest(); //harvest crops. The bool determines success based on crop status
+  void harvest(); //harvest crops.
   void water_crops(); //required every turn
   void plant_plots(); //plant more another plot of crops (requires money, but you can have multiple instances of crops growing at the same time).
   
