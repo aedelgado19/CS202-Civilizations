@@ -23,10 +23,11 @@ public:
   virtual ~Civilization();
   Civilization(const Civilization & source);
   void read(); //fill in fields for the civilization
-  void display(); //display details of the civilization
+  void display(int civ); //display details of the civilization
   virtual void buy(const std::string & to_buy, int amount) = 0; //buy goods from market
   virtual void sell(const std::string & to_sell, int amount) = 0; //sell goods to market in exchange for money
   virtual void trade(int lost, int al, int gained, int ag) = 0; //lost is what you gave, al is how much you lost, gained is what you gained and ag is how much of that item you gained
+  virtual int calculate() = 0; //calculate points
   bool check_money(int item, int amount);
   void display_market(); //displays items you can buy
   bool display_inventory(bool m);
@@ -37,9 +38,7 @@ public:
   bool compare_action();
   void required_action(int type);
   void failed_to_do_action(int civ);
-  void rename(char* n);
 protected:
-  char* name;
   int food;
   int money; //how much money you have
   int military; // how much protection your civilization has
@@ -56,6 +55,8 @@ public:
   void buy(const std::string & to_buy, int amount);
   void sell(const std::string & to_sell, int amount);
   void trade(int lost, int al, int gained, int ag);
+  int calculate();
+
   //specifically agriculture functions:
   void harvest(); //harvest crops.
   void water_crops(); //required every turn
@@ -73,7 +74,8 @@ public:
   void buy(const std::string & to_buy, int amount);
   void sell(const std::string & to_sell, int amount);
   void trade(int lost, int al, int gained, int ag);
- 
+  int calculate();
+  
   //specifically military functions:
   void train_troops(); //gain more soldiers
   void feed_troops(); //you must feed troops every round or you lose soldiers
@@ -91,12 +93,13 @@ public:
   void buy(const std::string & to_buy, int amount);
   void sell(const std::string & to_sell, int amount);
   void trade(int lost, int al, int gained, int ag);
- 
+  int calculate();
+  
   //specifically industry functions
   void produce_new_product(); //create a new product you can produce
   void work(); //required every turn. Produces exisitng products
 private:
-  std::vector<std::string> products; //you can sell these
+  int amount_of_products;
 };
 
 

@@ -15,26 +15,30 @@
 
 //constructor
 Civilization::Civilization(int f, int m, int s) : food(f), money(m), military(s), m_food(500), m_military(100){
-  name = new char[50];
   srand(time(NULL));
 }
 
 //destructor
 Civilization::~Civilization(){
-  delete [] name;
 }
 
 //copy constructor
 Civilization::Civilization(const Civilization & source){
-  name = new char[strlen(source.name) + 1];
-  strcpy(name, source.name);
+
 }
 
 //show all civ details
-void Civilization::display(){
+void Civilization::display(int civ){
   std::cout << " " << std::endl;
   std::cout << "----------------------" << std::endl;
-  std::cout << "Civilization name: " << name << std::endl;
+  std::cout << "Civilization Type: ";
+  if(civ == 1){
+    std::cout << "Agriculture" << std::endl;
+  } else if(civ == 2){
+    std::cout << "Military" << std::endl;
+  } else {
+    std::cout << "Industry" << std::endl;
+  }
   std::cout << "   Food: " << food << " meat" << std::endl;
   std::cout << "   Money: " << money << " dollars" << std::endl;
   std::cout << "   Military: " << military << " soldiers" << std::endl;
@@ -163,10 +167,6 @@ void Civilization::failed_to_do_action(int civ){ //civ: 1 = agr, 2 = mil, 3 = in
   }
 }
 
-//rename the name of the civilization
-void Civilization::rename(char* n){
-  strcpy(name, n);
-}
 // ***************** AGRICULTURE CLASS *********************
 
 //constructor (food, money, soldiers)
@@ -230,7 +230,7 @@ void Agriculture::sell(const std::string & to_sell, int amount){
 void Agriculture::display(){
   std::cout << " " << std::endl;
   std::cout << "Amount of plots: " << amount_of_plots << std::endl;
-  Civilization::display();
+  Civilization::display(1);
 }
 
 //trade with another civ. for lost and gained, 1 = food, 2 = soldiers
@@ -252,6 +252,20 @@ void Agriculture::trade(int lost, int al, int gained, int ag){
   } else {
     std::cout << "That was not a valid option." << std::endl;
   }
+}
+
+//calculate point totals
+int Agriculture::calculate(){
+  int f = food * 10; //10 points per food
+  int d = money * 20; //20 points per dollar
+  int m = military * 15; //15 per soldier
+  int a  = amount_of_plots * 20; // 20 per plot
+  std::cout << "     FOOD: " << food << " meat    => plus " << f << " points! " << std::endl;
+  std::cout << "     MONEY: " << money << " dollars    => plus " << d << " points!" << std::endl;
+  std::cout << "     MILITARY: " << military <<" soldiers     => plus " << m << " points!" << std::endl;
+  std::cout << "     PLOTS: " << amount_of_plots << " plots     => plus " << a << " points! " << std::endl;
+  std::cout << "       TOTAL = " << (f + d + m + a) << " points!" << std::endl;
+  return (f + d + m + a);
 }
 
 //harvest crops
@@ -296,7 +310,7 @@ void Agriculture::plant_plots(){
 
 //constructor (food, money, soldiers)
 Military::Military() : Civilization(100, 100, 100){
-
+  successful_wars = 0;
 }
 
 //buy from market
@@ -372,6 +386,20 @@ void Military::trade(int lost, int al, int gained, int ag){
   }
 }
 
+//calculate point totals
+int Military::calculate(){
+  int f = food * 10; //10 points per food
+  int d = money * 20; //20 points per dollar
+  int m = military * 15; //15 per soldier
+  int a  = successful_wars * 20; // 20 per war
+  std::cout << "     FOOD: " << food << " meat    => plus " << f << " points! " << std::endl;
+  std::cout << "     MONEY: " << money << " dollars    => plus " << d << " points!" << std::endl;
+  std::cout << "     MILITARY: " << military <<" soldiers     => plus " << m << " points!" << std::endl;
+  std::cout << "     SUCCESSFUL WARS: " << successful_wars << " wars     => plus " << a << " points! " << std::endl;
+  std::cout << "       TOTAL = " << (f + d + m + a) << " points!" << std::endl;
+  return (f + d + m + a);
+}
+
 //gain more soldiers
 void Military::train_troops(){
   std::cout << "Training was successful. You gained 15 soldiers." << std::endl;
@@ -391,25 +419,25 @@ void Military::wage_war(){
     std::cout << "You won the war!!! + 20 meat and + 40 dollars." << std::endl;
     food += 20;
     money += 40;
-    successful_wars++;
-  } else {
-    std::cout << "Their army was too powerful. You lost 25 soldiers. "<< std::endl;
-    military -= 25;
+    successful_wars += 1;
+    return;
   }
+  std::cout << "Their army was too powerful. You lost 25 soldiers. "<< std::endl;
+  military -= 25;
 }
 
 //display
 void Military::display(){
   std::cout << "wars won: " << successful_wars << std::endl;
   std::cout << " " << std::endl;
-  Civilization::display();
+  Civilization::display(2);
 }
 
 // ***************** INDUSTRY CLASS *********************
 
 //constructor (food, money, soldiers)
 Industry::Industry() : Civilization(50, 200, 50){
-
+  amount_of_products = 2;
 }
 
 //buy from market
@@ -485,13 +513,28 @@ void Industry::trade(int lost, int al, int gained, int ag){
   }
 }
 
+//calculate point totals
+int Industry::calculate(){
+  int f = food * 10; //10 points per food
+  int d = money * 20; //20 points per dollar
+  int m = military * 15; //15 per soldier
+  int a  = amount_of_products * 20; // 20 per product
+  std::cout << "     FOOD: " << food << " meat    => plus " << f << " points! " << std::endl;
+  std::cout << "     MONEY: " << money << " dollars    => plus " << d << " points!" << std::endl;
+  std::cout << "     MILITARY: " << military <<" soldiers     => plus " << m << " points!" << std::endl;
+  std::cout << "     DIFFERENT PRODUCTS PRODUCED: " << amount_of_products << " products     => plus " << a << " points! " << std::endl;
+  std::cout << "       TOTAL = " << (f + d + m + a) << " points!" << std::endl;
+  return (f + d + m + a);
+}
+
 //create a new product that you can produce
 void Industry::produce_new_product(){
   std::string item;
   std::cout << "What product would you like to produce?" << std::endl;
   std::getline(std::cin, item);
   std::cout << "Sounds good. Your production line now produces " << item << std::endl;
-  std::cout << "You can sell your new item for money." << std::endl;
+  std::cout << "You now produce " << amount_of_products << " total products. " << std::endl;
+  std::cout << "This will be added to your score in the end!" << std::endl;
 }
 
 //required every turn

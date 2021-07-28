@@ -20,7 +20,7 @@ using namespace std;
 #define MIL 2 //military
 #define IND 3 //industry
 
-void gameplay(int civ, int round, char* name, Agriculture & a, Military & m, Industry & i);
+void gameplay(int civ, int round, Agriculture & a, Military & m, Industry & i);
 void agriculture(int c, Agriculture & a);
 void military(int c, Military & m);
 void industry(int c, Industry & i);
@@ -46,7 +46,7 @@ int main(){
     rules();
   }
   cout << "Let's get started." << endl;
-  cout << "Please choose a civilization:" << endl;
+  cout << "Please choose a civilization to start with:" << endl;
   cout << "1 - agriculture" << endl;
   cout << "2 - military" << endl;
   cout << "3 - industry" << endl;
@@ -57,18 +57,7 @@ int main(){
     cout << "That was not one of the choices. Quitting program" << endl;
     return 0;
   }
-  cout << "What would you like to name your civilization? " << endl;
-  cout << "> ";
-  cin.get(name, 50);
-  cin.get();
-  if(choice == 1){
-    a.rename(name);
-  } else if(choice == 2){
-    m.rename(name);
-  } else {
-    i.rename(name);
-  }
-  gameplay(choice, 0, name, a, m, i);
+  gameplay(choice, 0, a, m, i);
   return 0;
 }
 
@@ -125,15 +114,15 @@ void rules(){
 }
 
 //basic gameplay
-void gameplay(int civ, int round, char* name, Agriculture & a, Military & m, Industry & i){
+void gameplay(int civ, int round, Agriculture & a, Military & m, Industry & i){
   int choice;
 
   if(civ == AGR) a.display();
   if(civ == MIL) m.display();
-  if(civ == IND) i.display();
+  if(civ == IND) i.display(3);
 
   for(int turn = 0; turn < 3; turn++){
-    cout << "Pick three actions to do (don't forget about your required one!" << endl;
+    cout << "Pick three actions to do (don't forget about your required one!)" << endl;
     cout << "1 - buy goods from the market" << endl;
     cout << "2 - sell items" << endl;
     cout << "3 - trade" << endl;
@@ -176,7 +165,31 @@ void gameplay(int civ, int round, char* name, Agriculture & a, Military & m, Ind
     }
   }
   if(round < 5){
-    gameplay(civ, round + 1, name, a, m, i);
+    int new_civ = (civ + 1) % 3;
+    cout << "=======================================" << endl;
+    cout << "             next round!               " << endl;
+    cout << "=======================================" << endl;
+    gameplay(new_civ, round + 1, a, m, i);
+  } else {
+    cout << "Awesome work! Game over. Here are the point totals: " << endl;
+    cout << "  Agricultural Society points: " << endl;
+    int ap = a.calculate();
+    cout << "  Military Society points: " << endl;
+    int mp = m.calculate();
+    cout << "  Industrial Society points: " << endl;
+    int ip = i.calculate();
+    if(ap > mp && ap > ip){ //agricultural win
+      cout << " " << endl;
+      cout << "WINNER: AGRICULTURAL SOCIETY!" << endl;
+    }
+    else if(mp > ap && mp > ip){ //military win
+      cout << " " << endl;
+      cout << "WINNER: MILITARY SOCIETY!" << endl;
+    }
+    else {
+      cout << " " << endl;
+      cout << "WINNER: INDUSTRIAL SOCIETY!" << endl;
+    }
   }
 }
 
@@ -224,19 +237,24 @@ void agriculture(int c, Agriculture & a){
   }
   else if(c == 3){
     trading(a);
+    cout << " " << endl;
   }
   else if(c == 4){
     a.harvest();
+    cout << " " << endl;
   }
   else if(c == 5){
     a.plant_plots();
+    cout << " " << endl;
   }
   else if(c == 6){
     a.water_crops();
     a.required_action(2);
+    cout << " " << endl;
   }
   else {
     cout << "That was not one of the choices. Quitting program." << endl;
+    cout << " " << endl;
     exit(1);
   }
 }
@@ -282,23 +300,29 @@ void military(int c, Military & m){
       cin.get();
       m.sell(sell, amount);
       m.display_inventory(true);
+      cout << " " << endl;
     }
   }
   else if(c == 3){
     trading(m);
+    cout << " " << endl;
   }
   else if(c == 4){
     m.train_troops();
+    cout << " " << endl;
   }
   else if(c == 5){
     m.wage_war();
+    cout << " " << endl;
   }
   else if(c == 6){
     m.feed_troops();
     m.required_action(2);
+    cout << " " << endl;
   }
   else {
     cout << "That was not one of the choices. Quitting program." << endl;
+    cout << " " << endl;
     exit(1);
   }
 }
@@ -349,16 +373,20 @@ void industry(int c, Industry & i){
   }
   else if(c == 3){
     trading(i);
+    cout << " " << endl;
   }
   else if(c == 4){
     i.produce_new_product();
+    cout << " " << endl;
   }
   else if(c == 5){
     i.work();
     i.required_action(2);
+    cout << " " << endl;
   }
   else {
     cout << "That was not one of the choices. Quitting program." << endl;
+    cout << " " << endl;
     exit(1);
   }
 }
