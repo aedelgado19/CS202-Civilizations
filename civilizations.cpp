@@ -547,82 +547,142 @@ void Industry::work(){
 
 //constructor
 Node::Node(){
+  next = nullptr;
+  prev = nullptr;
+  type = 0;
+}
 
+//constructor with args
+Node::Node(Civilization * c, int t){
+  next = nullptr;
+  prev = nullptr;
+  type = t;
+  civ = c;
 }
 
 //copy constructor
 Node::Node(const Civilization & source){
-
+  next = nullptr;
+  prev = nullptr;
 }
 
 //go to the next node
-//Node *& Node::go_next(){
-  
-//}
+Node *& Node::go_next(){
+  return next;
+}
+
+//go to previous node
+Node *& Node::go_prev(){
+  return prev;
+}
 
 //set next
-void Node::set_next(Node*& next){
-
+void Node::set_next(Node* n){
+  next = n;
 }
 
 //set previous
-void Node::set_prev(Node *& prev){
-
+void Node::set_prev(Node * p){
+  prev = p;
 }
 
+//call civilization display
+void Node::display(){
+  civ->display(type);
+}
 // ***************** DLL CLASS *********************
 
 //constructor
 DLL::DLL(){
-
+  head = nullptr;
 }
 
 //destructor
 DLL::~DLL(){
+  destruct(head);
+  head = nullptr;
+}
 
+//recursively deallocate all nodes
+void DLL::destruct(Node *& cur){
+  if(!cur) return;
+  if(cur->go_next()){
+    if(cur->go_prev()) cur->set_prev(nullptr);
+    Node* hold = cur->go_next();
+    cur->set_next(nullptr);
+    delete cur;
+    destruct(hold);
+  }
+  //final node
+  cur->set_prev(nullptr);
+  delete cur;
 }
 
 //copy constructor
 DLL::DLL(const DLL & source){
+  /*
 
+
+    YOU ALSO GOTTA DO THIS LOL IDK HOW TO DO THIS REALLY
+
+
+    ALLYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+
+   */
+  
 }
 
 //insert to DLL
-void DLL::insert(const Civilization *& civ){
-
+void DLL::insert(Civilization * c, int t){
+  Node * new_node = new Node(c, t);
+  insert(head, new_node);
 }
 
 //recursive insert
 void DLL::insert(Node * current, Node *& to_add){
-
+  if(!current) return;
+  if(current->go_next()){
+    insert(current->go_next(), to_add);
+  }
+  //otherwise insert the new node here
+  current->set_next(to_add);
+  to_add->set_prev(current);
+  to_add->set_next(nullptr);
 }
 
 //remove from DLL
 void DLL::remove(char* name){
-
+  if(!name) return;
+  remove(head, name);
 }
 
 //recursive remove
 void DLL::remove(Node * current, char* to_remove){
-
+  if(!current) return;
+  //heres the issue:
+  /*
+    i deleted the name field so like what are you strcmping
+    you also have to fix it so that you can have multiple
+    instances of societies not just 3
+    but then you have to change your whole ass main class
+   */
+		 
 }
 
 //display DLL
 void DLL::display(){
-
+  display(head);
 }
 
 //recursive display
 void DLL::display(Node * current){
-
+  if(!current) return;
+  current->display();
+  display(current->go_next());
 }
 
 //remove all nodes from DLL
 void DLL::remove_all(){
-
-}
-
-//recursive remove all
-void DLL::remove_all(Node *& current){
-  
+  destruct(head);
+  head = nullptr;
 }

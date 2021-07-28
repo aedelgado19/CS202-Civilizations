@@ -65,8 +65,7 @@ int main(){
 void rules(){
   char yn;
   
-  cout << "In this game, you can choose one of three" << endl;
-  cout << "civilizations to play as: agricultural, " << endl;
+  cout << "In this game, you can play as three civilizations: agricultural, " << endl;
   cout << "military, or industrial. Each has their own " << endl;
   cout << "strengths and weaknesses. The game has 5 rounds. In each round, " << endl;
   cout << "you will have 2 actions to play, and one required " << endl;
@@ -100,7 +99,7 @@ void rules(){
     cout << "   STRENGTHS: starts with higher money" << endl;
     cout << "   WEAKNESSES: has a low population and low military" << endl;
     cout << "   tip: you can choose to produce new products which means" << endl;
-    cout << "   you can be making money in parallel from different products" << endl;
+    cout << "   you can gain bonus points in the end" << endl;
     cout << " " << endl;
     cout << "MILITARY: " << endl;
     cout << "   REQUIRED ACTION FOR EACH TURN: feed troops - or else you lose soldiers" << endl;

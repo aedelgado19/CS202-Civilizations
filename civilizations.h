@@ -97,7 +97,7 @@ public:
   
   //specifically industry functions
   void produce_new_product(); //create a new product you can produce
-  void work(); //required every turn. Produces exisitng products
+  void work(); //required every turn. Produces existing products
 private:
   int amount_of_products;
 };
@@ -105,17 +105,21 @@ private:
 
 // ************** DATA STRUCTURE: DLL ******************
 class Node {
+public:
   Node();
+  Node(Civilization * c, int t);
   Node(const Civilization & source);
 
-  //commented out so that this can compile
-  //  Node *& go_next(); //go to the next node
-  void set_next(Node *& next);
-  void set_prev(Node *& prev);
+  Node *& go_next(); //go to the next node
+  Node *& go_prev(); //go to previous node
+  void set_next(Node * n);
+  void set_prev(Node * p);
+  void display();
 private:
   Node * next;
   Node * prev;
   Civilization * civ;
+  int type; //what type of civ it is: 1 - agr, 2 - mil, 3 - ind
 };
 
 class DLL {
@@ -123,7 +127,7 @@ public:
   DLL();
   ~DLL();
   DLL(const DLL & source); // copy constructor
-  void insert(const Civilization *& civ); //insert to DLL
+  void insert(Civilization * c, int t); //insert to DLL
   void remove(char* name); //remove from DLL
   void display();
   void remove_all(); //clear from DLL
@@ -132,5 +136,6 @@ private:
   void remove(Node * current, char* to_remove); //recursive remove
   void display(Node * current); //recursive display
   void remove_all(Node *& current); //recursive remove all
-  Node ** head;
+  void destruct(Node *& cur); // recursive deallocation for whole DLL
+  Node * head;
 };
