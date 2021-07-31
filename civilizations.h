@@ -23,7 +23,7 @@ public:
   virtual ~Civilization();
   Civilization(const Civilization & source);
   void read(); //fill in fields for the civilization
-  void display(int civ); //display details of the civilization
+  void display(char* n, int civ); //display details of the civilization
   virtual void buy(const std::string & to_buy, int amount) = 0; //buy goods from market
   virtual void sell(const std::string & to_sell, int amount) = 0; //sell goods to market in exchange for money
   virtual void trade(int lost, int al, int gained, int ag) = 0; //lost is what you gave, al is how much you lost, gained is what you gained and ag is how much of that item you gained
@@ -35,10 +35,12 @@ public:
   void random_inventory(int & food, int & soldiers); //print out a random inventory amounts (used in trading)
   bool compare_food(int i); //compares food passed in to civ's food 
   bool compare_military(int i); //compares military passed in to civ's military
+  char* ret_name(); //return the name
   bool compare_action();
   void required_action(int type);
   void failed_to_do_action(int civ);
 protected:
+  char* name;
   int food;
   int money; //how much money you have
   int military; // how much protection your civilization has
@@ -61,7 +63,7 @@ public:
   void harvest(); //harvest crops.
   void water_crops(); //required every turn
   void plant_plots(); //plant more another plot of crops (requires money, but you can have multiple instances of crops growing at the same time).
-  void display();
+  void display(char* n);
  private:
   int amount_of_plots;
 };
@@ -80,7 +82,7 @@ public:
   void train_troops(); //gain more soldiers
   void feed_troops(); //you must feed troops every round or you lose soldiers
   void wage_war(); //potentially gain resources but RNG how many soldiers you lose
-  void display();
+  void display(char* n);
 private:
   int successful_wars;
 };
@@ -115,6 +117,7 @@ public:
   void set_next(Node * n);
   void set_prev(Node * p);
   void display();
+  char* name();
 private:
   Node * next;
   Node * prev;
@@ -132,6 +135,7 @@ public:
   void display();
   void remove_all(); //clear from DLL
 private:
+  void cp(Node *& cur, Node * source);
   void insert(Node * current, Node *& to_add); //recursive insert
   void remove(Node * current, char* to_remove); //recursive remove
   void display(Node * current); //recursive display

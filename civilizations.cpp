@@ -14,21 +14,24 @@
 // ***************** CIVILIZATION CLASS *********************
 
 //constructor
-Civilization::Civilization(int f, int m, int s) : food(f), money(m), military(s), m_food(500), m_military(100){
+Civilization::Civilization(int f, int m, int s) : food(f), money(m), military(s), m_food(500), m_military(100), name(nullptr){
   srand(time(NULL));
+  name = new char[50];
 }
 
 //destructor
 Civilization::~Civilization(){
+  delete [] name;
 }
 
 //copy constructor
 Civilization::Civilization(const Civilization & source){
-
+  name = new char[strlen(source.name) + 1];
+  strcmp(name, source.name);
 }
 
 //show all civ details
-void Civilization::display(int civ){
+void Civilization::display(char* n, int civ){
   std::cout << " " << std::endl;
   std::cout << "----------------------" << std::endl;
   std::cout << "Civilization Type: ";
@@ -39,6 +42,8 @@ void Civilization::display(int civ){
   } else {
     std::cout << "Industry" << std::endl;
   }
+  if(n) std::cout << "NAME: " << n << std::endl;
+  std::cout << " " << std::endl;
   std::cout << "   Food: " << food << " meat" << std::endl;
   std::cout << "   Money: " << money << " dollars" << std::endl;
   std::cout << "   Military: " << military << " soldiers" << std::endl;
@@ -149,6 +154,10 @@ bool Civilization::compare_action(){
   return false;
 }
 
+char* Civilization::ret_name(){
+  return name;
+}
+
 //if they failed to do the required action, penalize
 void Civilization::failed_to_do_action(int civ){ //civ: 1 = agr, 2 = mil, 3 = ind
   if(civ == 1){ //agriculture
@@ -227,10 +236,10 @@ void Agriculture::sell(const std::string & to_sell, int amount){
 }
 
 //display
-void Agriculture::display(){
+void Agriculture::display(char* n){
   std::cout << " " << std::endl;
   std::cout << "Amount of plots: " << amount_of_plots << std::endl;
-  Civilization::display(1);
+  Civilization::display(n, 1);
 }
 
 //trade with another civ. for lost and gained, 1 = food, 2 = soldiers
@@ -300,6 +309,7 @@ void Agriculture::plant_plots(){
     if(money >= 10){
       amount_of_plots += 1;
       money -= 10;
+      std::cout << "Success! Number of plots now: " << amount_of_plots << std::endl;
     } else {
       std::cout << "You do not have enough money" << std::endl;
     }
@@ -427,10 +437,10 @@ void Military::wage_war(){
 }
 
 //display
-void Military::display(){
+void Military::display(char* n){
   std::cout << "wars won: " << successful_wars << std::endl;
   std::cout << " " << std::endl;
-  Civilization::display(2);
+  Civilization::display(n, 2);
 }
 
 // ***************** INDUSTRY CLASS *********************
@@ -588,7 +598,12 @@ void Node::set_prev(Node * p){
 
 //call civilization display
 void Node::display(){
-  civ->display(type);
+  civ->display(nullptr, type);
+}
+
+//return the name of the civilization
+char* Node::name(){
+  return civ->ret_name();
 }
 // ***************** DLL CLASS *********************
 
@@ -620,16 +635,20 @@ void DLL::destruct(Node *& cur){
 
 //copy constructor
 DLL::DLL(const DLL & source){
-  /*
+  cp(head, source.head);
+}
 
-
-    YOU ALSO GOTTA DO THIS LOL IDK HOW TO DO THIS REALLY
-
-
-    ALLYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
-
-   */
-  
+//recursive copy
+void DLL::cp(Node *& cur, Node * source){
+  if(source->go_next() == nullptr){
+    cur = new Node(*source);
+    cur->set_next(nullptr);
+    cur->set_prev(source->go_prev());
+  } else {
+    cur = new Node(*source);
+    cur->set_prev(source->go_prev());
+    cp(cur->go_next(), source->go_next());
+  }
 }
 
 //insert to DLL
@@ -659,14 +678,13 @@ void DLL::remove(char* name){
 //recursive remove
 void DLL::remove(Node * current, char* to_remove){
   if(!current) return;
-  //heres the issue:
-  /*
-    i deleted the name field so like what are you strcmping
-    you also have to fix it so that you can have multiple
-    instances of societies not just 3
-    but then you have to change your whole ass main class
-   */
-		 
+  if(strcmp(current->name(), to_remove) == 0){
+    current->go_prev()->set_next(current->go_next()); //set prev's next to cur's next
+    current->go_next()->set_prev(current->go_prev());
+    delete current;
+    return;
+  }
+  remove(current->go_next(), to_remove);
 }
 
 //display DLL

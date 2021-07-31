@@ -20,20 +20,24 @@ using namespace std;
 #define MIL 2 //military
 #define IND 3 //industry
 
-void gameplay(int civ, int round, Agriculture & a, Military & m, Industry & i);
+void gameplay(int civ, int round, Agriculture & a, Military & m, Industry & i, char* an, char* mn, char* in);
 void agriculture(int c, Agriculture & a);
 void military(int c, Military & m);
 void industry(int c, Industry & i);
 void rules();
 void trading(Civilization & civ);
+void data_structure();
 
 int main(){
   char yn;
+  char ds;
   int choice;
-  char name[50];
   Agriculture a;
   Military m;
   Industry i;
+  char an[50]; //agr name
+  char mn[50]; //mil name
+  char in[50]; //ind name
   
   cout << "------------------------------------" << endl;
   cout << "  Welcome to Civilization " << endl;
@@ -57,8 +61,46 @@ int main(){
     cout << "That was not one of the choices. Quitting program" << endl;
     return 0;
   }
-  gameplay(choice, 0, a, m, i);
+  cout << "Time to name all the civilizations. " << endl;
+  cout << "Enter the name for your agricultural society: " << endl;
+  cout << "> ";
+  cin.get(an, 50);
+  cin.get();
+  cout << "Enter the name for your military society: " << endl;
+  cout << "> ";
+  cin.get(mn, 50);
+  cin.get();
+  cout << "Enter the name for your industrial society: " << endl;
+  cout << "> ";
+  cin.get(in, 50);
+  cin.get();
+  cout << "========================================" << endl;
+  cout << " " << endl;
+  cout << "The default game has 3 civilizations. " << endl;
+  cout << "for DS testing, would you like to alter this? (y/n)" << endl;
+  cout  << "> ";
+  cin >> ds;
+  cin.get();
+  if(ds == 'y'){
+    data_structure();
+  }
+  gameplay(choice, 0, a, m, i, an, mn, in);
   return 0;
+}
+
+void data_structure(){
+  int choice;
+  
+  cout << "Choose an option: " << endl;
+  cout << "1 - insert a new civilization" << endl;
+  cout << "2 - remove a civilization" << endl;
+  cout << "3 - display all civilizations" << endl;
+  cout << "4 - remove all civilizations (also ends game)" << endl;
+  cout <<< " " << endl;
+  cout << "> ";
+  cin >> choice;
+  cin.get();
+  
 }
 
 //print out the rules of the game
@@ -113,12 +155,12 @@ void rules(){
 }
 
 //basic gameplay
-void gameplay(int civ, int round, Agriculture & a, Military & m, Industry & i){
+void gameplay(int civ, int round, Agriculture & a, Military & m, Industry & i, char* an, char* mn, char* in){
   int choice;
 
-  if(civ == AGR) a.display();
-  if(civ == MIL) m.display();
-  if(civ == IND) i.display(3);
+  if(civ == AGR) a.display(an);
+  if(civ == MIL) m.display(mn);
+  if(civ == IND) i.display(in, 3);
 
   for(int turn = 0; turn < 3; turn++){
     cout << "Pick three actions to do (don't forget about your required one!)" << endl;
@@ -166,9 +208,9 @@ void gameplay(int civ, int round, Agriculture & a, Military & m, Industry & i){
   if(round < 5){
     int new_civ = (civ + 1) % 3;
     cout << "=======================================" << endl;
-    cout << "             next round!               " << endl;
+    cout << "             next turn! " << endl;
     cout << "=======================================" << endl;
-    gameplay(new_civ, round + 1, a, m, i);
+    gameplay(new_civ, round + 1, a, m, i, an, mn, in);
   } else {
     cout << "Awesome work! Game over. Here are the point totals: " << endl;
     cout << "  Agricultural Society points: " << endl;
