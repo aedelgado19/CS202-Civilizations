@@ -26,9 +26,10 @@ void military(int c, Military & m);
 void industry(int c, Industry & i);
 void rules();
 void trading(Civilization & civ);
-void data_structure();
+void data_structure(DLL & dll);
 
 int main(){
+  DLL dll;
   char yn;
   char ds;
   int choice;
@@ -61,6 +62,7 @@ int main(){
     cout << "That was not one of the choices. Quitting program" << endl;
     return 0;
   }
+  cout << " " << endl;
   cout << "Time to name all the civilizations. " << endl;
   cout << "Enter the name for your agricultural society: " << endl;
   cout << "> ";
@@ -82,25 +84,65 @@ int main(){
   cin >> ds;
   cin.get();
   if(ds == 'y'){
-    data_structure();
+    data_structure(dll);
   }
   gameplay(choice, 0, a, m, i, an, mn, in);
   return 0;
 }
 
-void data_structure(){
+void data_structure(DLL & dll){
   int choice;
+  int type;
+  char name[50];
   
   cout << "Choose an option: " << endl;
   cout << "1 - insert a new civilization" << endl;
   cout << "2 - remove a civilization" << endl;
   cout << "3 - display all civilizations" << endl;
   cout << "4 - remove all civilizations (also ends game)" << endl;
-  cout <<< " " << endl;
+  cout << " " << endl;
   cout << "> ";
   cin >> choice;
   cin.get();
-  
+
+  if(choice == 1){
+    cout << "What kind of civilization would you like to add? " << endl;
+    cout << "1 - agriculture" << endl;
+    cout << "2 - military" << endl;
+    cout << "3 - industry" << endl;
+    cout << "> ";
+    cin >> type;
+    cin.get();
+    cout << "What would you like to call this civilization? " << endl;
+    cout << "> ";
+    cin.get(name, 50);
+    cin.get();
+
+    if(type == 1){
+      Agriculture * agr;
+      dll.insert(agr, choice);
+    } else if(type == 2){
+      Military * mil;
+      dll.insert(mil, choice);
+    } else if(type == 3){
+      Industry * ind;
+      dll.insert(ind, choice);
+    }
+  } else if(choice == 2){
+    char n[50];
+    cout << "What is the name of the civilization you'd like to remove? " << endl;
+    cout << "> ";
+    cin.get(n, 50);
+    cin.get();
+    dll.remove(n);
+  } else if(choice == 3){
+    dll.display();
+  } else if(choice == 4) {
+    dll.remove_all();
+    exit(1);
+  } else {
+    cout << "That was not one of the choices. " << endl;
+  }
 }
 
 //print out the rules of the game
@@ -158,11 +200,11 @@ void rules(){
 void gameplay(int civ, int round, Agriculture & a, Military & m, Industry & i, char* an, char* mn, char* in){
   int choice;
 
-  if(civ == AGR) a.display(an);
-  if(civ == MIL) m.display(mn);
-  if(civ == IND) i.display(in, 3);
-
   for(int turn = 0; turn < 3; turn++){
+    if(civ == AGR) a.display(an);
+    if(civ == MIL) m.display(mn);
+    if(civ == IND) i.display(in);
+
     cout << "Pick three actions to do (don't forget about your required one!)" << endl;
     cout << "1 - buy goods from the market" << endl;
     cout << "2 - sell items" << endl;

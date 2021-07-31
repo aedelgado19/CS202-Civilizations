@@ -96,7 +96,7 @@ public:
   void sell(const std::string & to_sell, int amount);
   void trade(int lost, int al, int gained, int ag);
   int calculate();
-  
+  void display(char* n);
   //specifically industry functions
   void produce_new_product(); //create a new product you can produce
   void work(); //required every turn. Produces existing products
@@ -116,7 +116,7 @@ public:
   Node *& go_prev(); //go to previous node
   void set_next(Node * n);
   void set_prev(Node * p);
-  void display();
+  void call_display();
   char* name();
 private:
   Node * next;

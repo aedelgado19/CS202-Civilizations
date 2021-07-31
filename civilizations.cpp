@@ -550,7 +550,11 @@ void Industry::produce_new_product(){
 //required every turn
 void Industry::work(){
   std::cout << "You went to work today. Good job! You completed your required action." << std::endl;
-  
+}
+
+void Industry::display(char* n){
+  std::cout << "Amount of products: " << amount_of_products << std::endl;
+  Civilization::display(n, 3);
 }
 
 // ***************** NODE CLASS *********************
@@ -597,7 +601,8 @@ void Node::set_prev(Node * p){
 }
 
 //call civilization display
-void Node::display(){
+void Node::call_display(){
+  std::cout << "ugh " << std::endl;
   civ->display(nullptr, type);
 }
 
@@ -690,12 +695,13 @@ void DLL::remove(Node * current, char* to_remove){
 //display DLL
 void DLL::display(){
   display(head);
+		  
 }
 
 //recursive display
 void DLL::display(Node * current){
   if(!current) return;
-  current->display();
+  current->call_display();
   display(current->go_next());
 }
 
